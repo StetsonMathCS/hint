@@ -1,25 +1,30 @@
 #include <iostream>
 #include <string>
-#include <stats.h>
-#include <map>
+#include "stats.h"
+#define ar array
 using namespace std;
 
+string a[2];
+
+string getCommand() {
+	for (int i = 0; i < 2; i++){
+		cin >> a[i];
+	}
+	return a[1];
+}
+
 int main() {
-	map <string, int> myMap;
-	map["search"] = 0;
-	map["add"] = 0;
-	map["tag"] = 0;
-	map["answer"] = 0;
-	map["help"] = 0;
-	string user_input;
-	cin >> user_input;
-        if (user_input.compare("hint stats"){
-			
-	}else if (user_input.compare("hints search"){
-		myMap["search"] += 1
-	}	
-	
-	
-	
+	while (true){
+		string user_input = getCommand();
+		if (user_input.compare("stats") != 0){
+			string textInput;
+			cout << user_input << ": ";
+			cin >> textInput;
+			Stats a(user_input, textInput);
+		
+		}else{
+			a.display();
+		}
+	}
 	return 0;
 }
