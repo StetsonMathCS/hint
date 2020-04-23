@@ -7,21 +7,6 @@
 using namespace std;
 using json = nlohmann::json;
 
-
-namespace
-{
-	size_t callback(
-			const char* in,
-			size_t size,
-			size-t num,
-			string* out)
-	{
-		const size_t totalBytes(size *num);
-		out->append(in, totalBytes);
-		return totalBytes;
-	}
-}
-
 int main()
 {
 	string question;
@@ -36,11 +21,14 @@ int main()
 	{
 
 		//easy_curl_setopt is setting the options for my curl
-		curl_easy_setopt(curl, CURLOPT_URL, "https://api.stackexchange.com/2.2/search?order=desc&sort=activity&intitle={question}&site=stackoverflow&filter=!BHMIbze.x2vCH_S4H0ZisKe_lF0yCi");
+		curl_easy_setopt(curl, CURLOPT_URL, "https://api.stackexchange.com/2.2/search?order=desc&sort=activity&intitle={question}&site=stackoverflow&filter=!)5IUN_bW2QoJ3.ftG)n_UX8Uuoty");
 
 		curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, 1L);
-
+		
+		//sets a waiting time before it times out waiting for a response form the website
 		curl_easy_setopt(curl, CURLOPT_TIMEOUT, 10);
+
+//		curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, callback);
 
 		result = curl_easy_perform(curl);
 
@@ -61,8 +49,9 @@ int main()
 		{
 			cout << "Sucessful Response From URL" << endl;
 
-			json jsonData;
-			json jsonReader;
+
+
+
 		}
 
 
