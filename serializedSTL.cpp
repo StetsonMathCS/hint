@@ -3,15 +3,13 @@
 #include <string>
 #include <map>
 
-#include <boost/archive/tmpdir.hpp>
-
 #include <boost/archive/text_iarchive.hpp>
 #include <boost/archive/text_oarchive.hpp>
 
+//for extended classes
 #include <boost/serialization/base_object.hpp>
-#include <boost/serialization/utility.hpp>
+//each of the stl containers have a file such as list.hpp
 #include <boost/serialization/map.hpp>
-#include <boost/serialization/assume_abstract.hpp>
 using namespace std;
 
 class inventory
@@ -29,36 +27,76 @@ class inventory
 	}
 	public:
     		inventory(){}
-		int add_item(string i)
+		virtual int add_item(const string i)
 		{
-			if(find(i)==items.end())
+			if(items.find(i)==items.end())
 			{
-				items[string]++;
+				items[i]=1;
 			}
 			else
 			{
-				items.insert(i,1);
+				items[i]++;
 			}
-			return items[string];
+			return items[i];
+		}
+		virtual int remove_item(const string i)
+                {
+			if(items.find(i)==items.end()||items[i]==1)
+			{
+				items[i] = 0;
+			}
+			else
+			{
+				items[i]--;
+			}
+			return items[i];
+		}
+		void empty_items()
+		{
+			items.clear();
+		}
+};
+
+class bag : inventory
+{
+	friend class boost::serialization::access;
+	int capacity;
+	int held;
+	template<class Archive>
+	void serialize(Archive & ar, const unsigned int version)
+	{
+		// serialize base class information
+		ar & boost::serialization::base_object<inventory>(*this);
+		// serialize new variables
+		ar & capacity;
+		ar & held;
+	}
+	public:
+		bag(const int c){
+			capacity = c;
+		}
+		int add_item(string i)
+		{
+			if(held<capacity)
+			{
+				held++;
+				return inventory::add_item(i);
+			}
+			return -1;
 		}
 		int remove_item(string i)
                 {
-                        if(find(i)==items.end())
-                        {
-                                items[string]--;
-                        }
-			else
+			if(held>0)
 			{
-                        	items.insert(i,0);
+				held--;
+				return inventory::remove_item(i);
 			}
-			return items[string];
-                }
-		void empty_items()
-		{}
+			return -1;
+		}
 };
 
 //saves serialized archive to a file
-void save_inventory(const bus_schedule &s, const char * filename)
+void save_inventory(const inventory &s, const char * filename)
 {
 	ofstream ofs(filename);
 	boost::archive::text_oarchive oa(ofs);
@@ -68,12 +106,12 @@ void save_inventory(const bus_schedule &s, const char * filename)
 
 
 //load serialized archive to a file
-void load_inventory(const bus_schedule &s, const char * filename)
+void load_inventory(inventory &s, const char * filename)
 {
         ifstream ifs(filename);
-        boost::archive::text_oarchive ia(ifs);
+        boost::archive::text_iarchive ia(ifs);
 	//serialize(oa, 1)
-        ia << s;
+        ia >> s;
 }
 
 int main()
