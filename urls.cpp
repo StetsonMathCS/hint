@@ -9,27 +9,31 @@ using json = nlohmann::json;
 
 int main()
 {
+	//thsi is the input from the user
 	string question;
-	cout << "Please Enter your Question" << endl;
+	cout << "Please Enter your Question Using EXACTLY 2 Words" << endl;
 	getline(cin, question);
 
+	//initiating the curl
 	CURL *curl;
 	CURLcode result;
 	curl = curl_easy_init();
+	string url = "api.stackexchange.com/2.2/search?order=desc&sort=activity&intitle=" + question + "&site=stackoverflow&filter=!)8aCqWxCWk*)CTW";
 
 	if(curl)
 	{
-
-		//easy_curl_setopt is setting the options for my curl
-		curl_easy_setopt(curl, CURLOPT_URL, "https://api.stackexchange.com/2.2/search?order=desc&sort=activity&intitle={question}&site=stackoverflow&filter=!)5IUN_bW2QoJ3.ftG)n_UX8Uuoty");
-
+		curl_easy_setopt(curl, CURLOPT_URL, ("api.stackexchange.com/2.2/search?order=desc&sort=activity&intitle={question}&site=stackoverflow&filter=!)8aCqWxCWk*)CTW"));
+	
+		//follow URLS
 		curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, 1L);
 		
 		//sets a waiting time before it times out waiting for a response form the website
 		curl_easy_setopt(curl, CURLOPT_TIMEOUT, 10);
 
-//		curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, callback);
+		//decodes weird charcters
+		curl_easy_setopt(curl, CURLOPT_ACCEPT_ENCODING, "gzip");
 
+		//actually getting the data
 		result = curl_easy_perform(curl);
 
 		//making sure that the curl is ok and worked right
