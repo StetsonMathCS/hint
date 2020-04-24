@@ -5,11 +5,16 @@
 
 #include <boost/archive/text_iarchive.hpp>
 #include <boost/archive/text_oarchive.hpp>
+/*if saving to xml
+#include <boost/archive/xml_iarchive.hpp>
+#include <boost/archive/xml_oarchive.hpp>
+*/
 
 //for extended classes
 #include <boost/serialization/base_object.hpp>
-//each of the stl containers have a file such as list.hpp
+//each of the stl containers have a file such as list.hpp, vector.hpp, set.hpp
 #include <boost/serialization/map.hpp>
+#include <boost/serialization/string.hpp>
 using namespace std;
 
 class inventory
@@ -22,7 +27,9 @@ class inventory
 	template<class Archive>
 	void serialize(Archive & ar, const unsigned int version)
 	{
-        	//& stands in for << or >>
+        	//& stands in for << or >> and works with all primitives
+		//stl objects also work if you import the respective hpp
+							//^see header
 		ar & items;
 	}
 	public:
@@ -54,6 +61,13 @@ class inventory
 		void empty_items()
 		{
 			items.clear();
+		}
+		void print()
+		{
+			for(auto& i : items)
+			{
+				cout << i.first << ": " << i.second << endl;
+			}
 		}
 };
 
@@ -99,6 +113,7 @@ class bag : inventory
 void save_inventory(const inventory &s, const char * filename)
 {
 	ofstream ofs(filename);
+	//if xml, boost::archive::xml_oarchive oa(ofs);
 	boost::archive::text_oarchive oa(ofs);
 	//serialize(oa, 1)
 	oa << s;
@@ -109,12 +124,35 @@ void save_inventory(const inventory &s, const char * filename)
 void load_inventory(inventory &s, const char * filename)
 {
         ifstream ifs(filename);
-        boost::archive::text_iarchive ia(ifs);
+        //if xml, boost::archive::xml_iarchive ia(ifs);
+	boost::archive::text_iarchive ia(ifs);
 	//serialize(oa, 1)
         ia >> s;
 }
 
+/*alternative non member serialization method
+namespace boost {
+namespace serialization {
+
+template<class Archive>
+void serialize(Archive & ar, inventory & i, const unsigned int version)
+{
+	ar & i.items;
+}*/
+
 int main()
 {
-	
+	inventory i;
+	string file = "savefile.txt"; //or savefile.xml
+	i.add_item("apple");
+	i.add_item("apple");
+	i.add_item("orange");
+	//creates or changes savefile.txt to store the inventory
+	//savefile.txt can be found in ls -a or viewed in vim
+	save_inventory(i, file.c_str());
+	i.add_item("knife");
+	//loads the saved list
+	//knife is lost as it was not saved
+	load_inventory(i, file.c_str());
+	i.print();
 }
