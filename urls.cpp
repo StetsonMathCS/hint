@@ -4,9 +4,7 @@
 #include <string>
 #include <iostream>
 #include <fstream>
-#include "json/json.h"
 #include "json.hpp"
-#include <unistd.h>
 using json = nlohmann::json;
 using namespace std;
 
@@ -14,8 +12,8 @@ static std::string readBuffer;
 
 static size_t WriteCallback(void *contents, size_t size, size_t nmemb, void *userp)
 {
-    ((std::string*)userp)->append((char*)contents, size * nmemb);
-    return size * nmemb;
+	((std::string*)userp)->append((char*)contents, size * nmemb);
+	return size * nmemb;
 }
 
 int main()
@@ -70,7 +68,28 @@ int main()
 			cout << "Sucessful Response From URL" << endl;
 			cout << readBuffer << endl;
 			json data = json::parse(readBuffer);
-			cout << data[anwser_id] << endl;
+			json newdata = data["items"];
+			data = newdata[0];
+			if(data["accepted_answer_id"] != NULL)
+			{
+				newdata = data["accepted_answer_id"];
+				cout << newdata << endl;
+			}
+			else
+			{
+				for(int i = 1; i < 3; i++)
+				{
+					data = newdata[i];
+					if(data["accepted_answer_id"] != NULL)
+					{
+						break;
+					}
+
+				}
+			}	
+
+
+
 		}
 	}
 	return 0;
