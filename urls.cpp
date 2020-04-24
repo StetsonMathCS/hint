@@ -16,14 +16,8 @@ static size_t WriteCallback(void *contents, size_t size, size_t nmemb, void *use
 	return size * nmemb;
 }
 
-int main()
+int  answer(const char* url)
 {
-	//thsi is the input from the user
-	//	string worda, wordb;
-	//	cout << "Please Enter your Question Using EXACTLY 2 Words" << endl;
-	//	cin >> worda >> wordb;
-	//	string question = worda + "%20" + wordb;
-	//	cout << question;	
 
 	//initiating the curl
 	CURL *curl;
@@ -32,7 +26,7 @@ int main()
 
 	if(curl)
 	{
-		curl_easy_setopt(curl, CURLOPT_URL, ("https://api.stackexchange.com/2.2/search?order=desc&sort=relevance&intitle=close%20vim&site=stackoverflow&filter=!)8aCqWxCWk*)CTW")); //This URL would need to be Malleable
+		curl_easy_setopt(curl, CURLOPT_URL, (url)); //This URL would need to be Malleable
 
 		//follow URLS
 		curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, 1L);
@@ -54,7 +48,7 @@ int main()
 		if(result != CURLE_OK)
 		{
 			cout << curl_easy_strerror(result) << endl;
-			return 1;
+			return  1;
 		}
 
 		//making that the website gave info 
@@ -65,64 +59,63 @@ int main()
 		//if website worked it will be equal to 200
 		if(httpCode == 200)
 		{
+			//parseing data that we read in
 			json data = json::parse(readBuffer);
 			json newdata = data["items"];
 			data = newdata[0];
-			if(data["accepted_answer_id"] != NULL)
+			if(data["body"] != NULL)
 			{
-				newdata = data["accepted_answer_id"];
+				newdata = data["body"];
+				cout << data["answer_id"] << endl;
+				cout << newdata << endl;
+				return  0;
 			}
 			else
 			{
 				int flag = 0;
+
 				for(int i = 1; i < 3; i++)
 				{
-					data = newdata[i];				//Need to Figure out how to really do Try/Catch in C++
-					if(data["accepted_answer_id"] != NULL)
+
+					//checking second and third arrays for an accepted answer
+					data = newdata[i];				
+					if(data["body"] != NULL)
 					{
-						break;
+
+						newdata = data["body"];
+						cout << newdata << endl;
+						return  0;
+
 					}
+
+
+					//Flag is checking only three times for a valid answer if no valid answer then it terminates program
 					flag++;
-
-
 				}
+
 				if(flag == 2)
 				{
-					return 0;	
-				}	
+					return  1;	
+				}
 			}
-
-			CURL *curl;
-			CURLcode result;
-			curl = curl_easy_init();
-			curl_easy_setopt(curl, CURLOPT_URL, ("https://api.stackexchange.com/2.2/answers/23249538?order=desc&sort=activity&site=stackoverflow&filter=!1zSk1ioD0vr4SZwW_vEX9"));	//If i can make these URLS Changeable
-																								//We could Do lots with this!
-
-			//follow URLS
-			curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, 1L);
-
-			//sets a waiting time before it times out waiting for a response form the website
-			curl_easy_setopt(curl, CURLOPT_TIMEOUT, 10);
-
-			//decodes weird charcters
-			curl_easy_setopt(curl, CURLOPT_ACCEPT_ENCODING, "gzip");
-
-			//actually getting the data
-			result = curl_easy_perform(curl);
-
-			//making sure that the curl is ok and worked right
-			if(result != CURLE_OK)
-			{
-				cout << curl_easy_strerror(result) << endl;
-				return 1;
-			}
-
 		}
+
+		//This Happens If URL Fails to get info	
 		else
 		{
 			cout << "URL FAILED TO LOAD" << endl;
-			return 1;
+			return  1;
 		}
 	}
+	return  0;
+}
+
+
+
+
+
+int main()
+{
+	answer("api.stackexchange.com/2.2/answers?order=desc&sort=activity&site=stackoverflow&filter=!)Q29mbLxf6w-Je3bui7wXUQa");
 	return 0;
 }
