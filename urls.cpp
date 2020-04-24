@@ -32,7 +32,7 @@ int main()
 
 	if(curl)
 	{
-		curl_easy_setopt(curl, CURLOPT_URL, ("https://api.stackexchange.com/2.2/search?order=desc&sort=relevance&intitle=close%20vim&site=stackoverflow&filter=!)8aCqWxCWk*)CTW"));
+		curl_easy_setopt(curl, CURLOPT_URL, ("https://api.stackexchange.com/2.2/search?order=desc&sort=relevance&intitle=close%20vim&site=stackoverflow&filter=!)8aCqWxCWk*)CTW")); //This URL would need to be Malleable
 
 		//follow URLS
 		curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, 1L);
@@ -65,31 +65,63 @@ int main()
 		//if website worked it will be equal to 200
 		if(httpCode == 200)
 		{
-			cout << "Sucessful Response From URL" << endl;
-			cout << readBuffer << endl;
 			json data = json::parse(readBuffer);
 			json newdata = data["items"];
 			data = newdata[0];
 			if(data["accepted_answer_id"] != NULL)
 			{
 				newdata = data["accepted_answer_id"];
-				cout << newdata << endl;
 			}
 			else
 			{
+				int flag = 0;
 				for(int i = 1; i < 3; i++)
 				{
-					data = newdata[i];
+					data = newdata[i];				//Need to Figure out how to really do Try/Catch in C++
 					if(data["accepted_answer_id"] != NULL)
 					{
 						break;
 					}
+					flag++;
+
 
 				}
-			}	
+				if(flag == 2)
+				{
+					return 0;	
+				}	
+			}
 
+			CURL *curl;
+			CURLcode result;
+			curl = curl_easy_init();
+			curl_easy_setopt(curl, CURLOPT_URL, ("https://api.stackexchange.com/2.2/answers/23249538?order=desc&sort=activity&site=stackoverflow&filter=!1zSk1ioD0vr4SZwW_vEX9"));	//If i can make these URLS Changeable
+																								//We could Do lots with this!
 
+			//follow URLS
+			curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, 1L);
 
+			//sets a waiting time before it times out waiting for a response form the website
+			curl_easy_setopt(curl, CURLOPT_TIMEOUT, 10);
+
+			//decodes weird charcters
+			curl_easy_setopt(curl, CURLOPT_ACCEPT_ENCODING, "gzip");
+
+			//actually getting the data
+			result = curl_easy_perform(curl);
+
+			//making sure that the curl is ok and worked right
+			if(result != CURLE_OK)
+			{
+				cout << curl_easy_strerror(result) << endl;
+				return 1;
+			}
+
+		}
+		else
+		{
+			cout << "URL FAILED TO LOAD" << endl;
+			return 1;
 		}
 	}
 	return 0;
