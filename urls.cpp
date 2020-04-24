@@ -6,13 +6,17 @@
 #include <fstream>
 #include "json/json.h"
 #include "json.hpp"
+#include <unistd.h>
 using json = nlohmann::json;
 using namespace std;
 
+static std::string readBuffer;
 
-
-
-
+static size_t WriteCallback(void *contents, size_t size, size_t nmemb, void *userp)
+{
+    ((std::string*)userp)->append((char*)contents, size * nmemb);
+    return size * nmemb;
+}
 
 int main()
 {
@@ -28,7 +32,6 @@ int main()
 	CURLcode result;
 	curl = curl_easy_init();
 
-	FILE* file = fopen("urls.txt", "w");
 	if(curl)
 	{
 		curl_easy_setopt(curl, CURLOPT_URL, ("https://api.stackexchange.com/2.2/search?order=desc&sort=relevance&intitle=close%20vim&site=stackoverflow&filter=!)8aCqWxCWk*)CTW"));
@@ -42,7 +45,9 @@ int main()
 		//decodes weird charcters
 		curl_easy_setopt(curl, CURLOPT_ACCEPT_ENCODING, "gzip");
 
-		curl_easy_setopt(curl, CURLOPT_WRITEDATA, file);
+		curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, WriteCallback);
+
+		curl_easy_setopt(curl, CURLOPT_WRITEDATA, &readBuffer);
 
 		//actually getting the data
 		result = curl_easy_perform(curl);
@@ -62,34 +67,11 @@ int main()
 		//if website worked it will be equal to 200
 		if(httpCode == 200)
 		{
-			ifstream ifile("urls.txt");
-
 			cout << "Sucessful Response From URL" << endl;
-			string line;
-
-			if(ifile.is_open())
-			{
-				cout << "Attemting To Get Answer ID" << endl;
-				while(getline(ifile, line))
-				{
-					cout << "Turninng File into JSON" << endl;
-					stringstream s(line);
-					json j_done = json::parse(s);
-					
-					
-				}
-			}
-
-
-
-
+			cout << readBuffer << endl;
+			json data = json::parse(readBuffer);
+			cout << data[anwser_id] << endl;
 		}
-
-
-
 	}
 	return 0;
-
-
-
 }
