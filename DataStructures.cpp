@@ -2,10 +2,8 @@
 #include <string>
 #include <iostream>
 #include <vector>
-#include <>
 
 using namespace std;
-
 
 template <typename T>
 class Queue {
@@ -18,14 +16,12 @@ class Queue {
       int size;
 
    public:
-      Queue( int );
-      Queue( Queue const & );
+      Queue(int);
+      Queue(Queue const &);
       ~Queue();
-
       bool empty() const;
       int size() const;
       T front() const;
-
       void push( T const & );
       void pop();
 };
@@ -46,8 +42,8 @@ class LinkedList
     LinkedList();
     void insert_front(T value);
     void push_back(T value);
-    int length();
     void reverse();
+    int length();
     T nth(int n);
     void print();
 };
@@ -56,9 +52,9 @@ template <typename T>
 class DynamicArray
 {
 private:
-    int size_;
-    int max_;
-    int *arrayholder_;
+    int size;
+    int max;
+    int *arrayholder;
 
 public:
     DynamicArray()
@@ -70,7 +66,7 @@ public:
 
     ~DynamicArray()
     {
-        delete[] this->arrayholder_;
+        delete[] this->arrayholder;
     }
 
     int size()
@@ -89,14 +85,14 @@ public:
         if (this->max < this->size + 1)
         {
             this->max *= 2;
-            int *tmp = new int[this->max];
+            int *temp = new int[this->max];
 
             for (sizet i = 0; i < this->size; i++)
             {
-                tmp[i] = this->arrayholder[i];              
+                temp[i] = this->arrayholder[i];              
             }
             delete[] this->arrayholder;
-            this->arrayholder = tmp;
+            this->arrayholder = temp;
             this->arrayholder[this->size] = n;
             this->size += 1;
         }
