@@ -3,8 +3,8 @@ CXXFLAGS=-g -Wall -ansi `xapian-config --cxxflags` `xapian-config --libs`
 
 all: main
 
-main.o: main.cpp
-	$(CXX) $(CXXFLAGS) -c main.cpp
+main.o: search.cpp
+	$(CXX) $(CXXFLAGS) -c search.cpp
 
-main: main.o
-	$(CXX) $(CXXFLAGS) -o main main.o
+main: search.o
+	$(CXX) $(CXXFLAGS) -o search search.o
