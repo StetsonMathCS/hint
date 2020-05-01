@@ -2,6 +2,8 @@
 // This code, when run, opens up a temporary text file containing a template for the user to enter data, which, upon saving, creates a text file containing all the relevant data under the name entered by the user.
 // This is NOT the most efficient way to do this, but for what we are doing, it works.
 
+// VERY IMPORTANT: compile with: g++ -Wall -o template -lboost_filesystem template.cpp
+
 #include <fstream>
 #include <iostream>
 #include <string>
