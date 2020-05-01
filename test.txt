@@ -1,4 +1,0 @@
-this is a test document to prove xapian search
-works 
-on files
-I want to find the word xapian. should return 2 results
