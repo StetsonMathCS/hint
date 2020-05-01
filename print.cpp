@@ -8,6 +8,7 @@ using namespace std;
 // So I'll pull from the classes
 
 // Queue
+template <typename T>
 void print(Queue<*void> q) { //take in the Queue that is given. *void since I'm pretty sure the data can be anything but subject to change
 	cout << "====== Start Of Data ======" << endl; // Makes it more readable
 	while(!q.empty()) {
@@ -18,6 +19,7 @@ void print(Queue<*void> q) { //take in the Queue that is given. *void since I'm 
 }
 
 // Linked List
+template <typename T>
 void print(LinkedList<*void> l) { // This has it's own print function...? Again, *void can be replaced
 	cout << "====== Start Of Data ======" << endl; // Makes it more readable
 	l.print(); // I don't know what this print looks like...
@@ -31,6 +33,7 @@ void print(LinkedList<*void> l) { // This has it's own print function...? Again,
 
 // Dynamic Array
 // Wait a second this defines the functions in the class???
+template <typename T>
 void print(DynamicArray<*void> d) { // same deal as above, *void can be replaced
 	cout << "====== Start Of Data ======" << endl;
 	for(int i = 0; i < d.size(); i++) {

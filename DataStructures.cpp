@@ -13,7 +13,7 @@ class Queue {
       int tail;
       int array_capacity;
       int initial_capacity;
-      int size;
+      int mysize;
 
    public:
       Queue(int);
@@ -52,7 +52,7 @@ template <typename T>
 class DynamicArray
 {
 private:
-    int size;
+    int mysize;
     int max;
     int *arrayholder;
 
@@ -69,7 +69,7 @@ public:
         delete[] this->arrayholder;
     }
 
-    int size()
+    int size() 
     {
         return this->size;
     }
@@ -87,7 +87,7 @@ public:
             this->max *= 2;
             int *temp = new int[this->max];
 
-            for (sizet i = 0; i < this->size; i++)
+            for (int i = 0; i < this->size; i++)
             {
                 temp[i] = this->arrayholder[i];              
             }
