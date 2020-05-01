@@ -9,14 +9,14 @@ using json = nlohmann::json;
 using namespace std;
 
 static std::string readBuffer;
-
+//these are what it keep hold of the data
 static size_t WriteCallback(void *contents, size_t size, size_t nmemb, void *userp)
 {
 	((std::string*)userp)->append((char*)contents, size * nmemb);
 	return size * nmemb;
 }
 
-int  answer(const char* url)
+int answer(const char* url)
 {
 
 	//initiating the curl
@@ -37,6 +37,7 @@ int  answer(const char* url)
 		//decodes weird charcters
 		curl_easy_setopt(curl, CURLOPT_ACCEPT_ENCODING, "gzip");
 
+		//Sends data to a fucntion i can access
 		curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, WriteCallback);
 
 		curl_easy_setopt(curl, CURLOPT_WRITEDATA, &readBuffer);
@@ -65,12 +66,10 @@ int  answer(const char* url)
 			data = newdata[0];
 			if(data["body"] != NULL)
 			{
-				newdata = data["body"];
-				cout << data["answer_id"] << endl;
-				cout << newdata << endl;
-				return  0;
+				newdata = data["body"];	//If this ends here then one should recive the answer back
+				return  newdata;
 			}
-			else
+			else	//answer not found in first index of array checking the nex two
 			{
 				int flag = 0;
 
@@ -83,8 +82,7 @@ int  answer(const char* url)
 					{
 
 						newdata = data["body"];
-						cout << newdata << endl;
-						return  0;
+						return newdata;
 
 					}
 
@@ -92,9 +90,10 @@ int  answer(const char* url)
 					//Flag is checking only three times for a valid answer if no valid answer then it terminates program
 					flag++;
 				}
-
+				//seeing if we got a valid answer or not from one of the other indexes
 				if(flag == 2)
 				{
+					cout << "Unable to locate answer" << endl;
 					return  1;	
 				}
 			}
@@ -107,15 +106,8 @@ int  answer(const char* url)
 			return  1;
 		}
 	}
+	//if we got here then curl failed to iniitlaize
+	cout << "Request Failed CURL not TRUE" << endl;
 	return  0;
 }
 
-
-
-
-
-int main()
-{
-	answer("api.stackexchange.com/2.2/answers?order=desc&sort=activity&site=stackoverflow&filter=!)Q29mbLxf6w-Je3bui7wXUQa");
-	return 0;
-}
