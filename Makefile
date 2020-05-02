@@ -1,7 +1,7 @@
 CXXFLAGS=-Wall -std=c++11 -lboost_serialization
 
-main: serializedSTL.cpp
-	g++ serializedSTL.cpp $(CXXFLAGS) -o main
+main: main.cpp
+	g++ main.cpp $(CXXFLAGS) -o main
 
 .PHONY: clean
 clean:
