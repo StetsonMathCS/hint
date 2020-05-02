@@ -155,4 +155,5 @@ int main()
 	//knife is lost as it was not saved
 	load_inventory(i, file.c_str());
 	i.print();
+	cout << getenv("HOME") << endl;
 }
