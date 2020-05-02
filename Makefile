@@ -1,5 +1,5 @@
 CXX = g++
-CXXFLAGS = -Wall -ansi `xapian-config --cxxflags1` `xapian-config --libs` -pedantic -g -02
+CXXFLAGS = -Wall -ansi -lboost_serialization `xapian-config --cxxflags1` `xapian-config --libs` -pedantic -g
 
 datastructures.o: datastructures.h datastructures.cpp
 
