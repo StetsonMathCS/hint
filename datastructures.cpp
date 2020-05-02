@@ -41,6 +41,6 @@ void DataStructures::rm(int index){
 	myMap.erase(myvec.at(index-1)["hint"]);
 }
 
-string DataStructures::recent(){
+string DataStructures::recent() const{
 	return myvec.back()["hint"]->second;
 }
