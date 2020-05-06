@@ -43,20 +43,9 @@ void display(map<string, map<string, string> > *myMap, map<string, map<string, i
 }
 
 ////Serialization
-//non member serialization method
-namespace boost {
-namespace serialization {
-
-        template<class Archive>
-        void serialize(Archive & ar, vector<map<string, map<string, string>>>& hints, const unsigned int version)
-        {
-                ar & hints;
-        }
-}
-}
 
 //saves serialized archive to a file
-void save_hints(const vector<map<string, map<string, string>>>& hints)
+void save_hints(const DataStructures& hints)
 {
         string homedir = string(getenv("HOME"))+"\\hints.txt";
         //saves in user
@@ -71,7 +60,7 @@ void save_hints(const vector<map<string, map<string, string>>>& hints)
 
 
 //load serialized archive to a file
-void load_hints(vector<map<string, map<string, string>>>& hints)
+void load_hints(DataStructures& hints)
 {
         string homedir = string(getenv("HOME"))+"\\hints.txt";
         ifstream ifs(homedir.c_str());
