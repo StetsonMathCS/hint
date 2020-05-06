@@ -15,7 +15,7 @@ void DataStructures::add(const string word, const string def, const string in){ 
 		string input;
 		cin >> input;
 		if (input.compare("Y") == 0){
-			return DataStructures::update(word, def);	//-If yes going to the update function
+			return DataStructures::update(word, def, in);	//-If yes going to the update function
 		}else{
 			return;
 		}	
@@ -32,7 +32,7 @@ void DataStructures::update(const string word, const string def, const string in
 	if (myMap.count(word)){			// -Update the existed word
 		myMap[word] = def;
 	}else{					//-If that word is not exist -> creating a new one by using add function
-		return DataStructures::add(word, def);
+		return DataStructures::add(word, def, in);
 	}
 
 }
