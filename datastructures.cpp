@@ -6,47 +6,75 @@
 using namespace std;
 
 DataStructures::DataStructures(){
+	index = 1;
 }
 
-void DataStructures::add(const string hint, const string hint_input, const string input){
-	myMap[hint][hint_input] = input;
-	myMap.insert(pair(0,1));
-	myvec.push_back(myMap);
-}
-
-void DataStructures::update(const string hint, const string hint_input, const string input){
-	if(myMap.count(hint)){
-		if(myMap[hint].count(hint_input)){
-			myMap[hint][hint_input] = input;
+void DataStructures::add(const string word, const string def){ 		//-Adding new word and its definition into the map 
+	if (myMap.count(word)){						//-Checking if that word is already existed
+		cout << word << " is already defined. Update? (Y/N)";
+		string input;
+		cin >> input;
+		if (input.compare("Y") == 0){
+			return DataStructures::update(word, def);	//-If yes going to the update function
+		}else{
+			return;
 		}	
 	}else {
-		cout << "Create a new hint" << endl;
-		myMap[hint][hint_input] = input;
+		myMap[word] = def;		//-If no adding the new word
+		wordPos[word] = index;		//-Keeping track with the sequence of the map
+		index+=1;
+	}
+
+}
+
+
+void DataStructures::update(const string word, const string def){
+	if (myMap.count(word)){			// -Update the existed word
+		myMap[word] = def;
+	}else{					//-If that word is not exist -> creating a new one by using add function
+		return DataStructures::add(word, def);
+	}
+
+}
+
+void DataStructures::display() {	//-Print out all the element of the map, word
+	map<string, string>::const_iterator it;
+	for (it = myMap.begin(); it != myMap.end() ; it++){
+		cout << wordPos[it->first] << ": " << it->first << ": " << it->second << endl;
 	}
 }
 
-void DataStructures::display() {
-	map<string, map<string, string> >::iterator it;
-	map<string, string>::iterator another;
+void DataStructures::rm(const int index){	//-Removing one of the word of the map
+	map<string, string>::const_iterator it;	//-Iterate through the map in order to get the string
+						
+	for (it = myMap.begin(); it != myMap.end(); it++){
+		if (wordPos[it->first] == index){
+			myMap.erase(it->first);
+			wordPos.erase(it->first);
+		}
 
-	for (it = myMap.begin; it != myMap.end(); it++){
-		for (another = it->second.begin(); another != it->second.end(); another++){
-		cout << it->first << " " << another->first << " " << another->second << endl;
 	}
 }
 
-void DataStructures::rm(int index){
-	int result = index - 1;
-	myvec.erase(myvec.begin() + result);
-	myMap.erase(myvec.at(index-1)["hint"]);
+string DataStructures::recent() const{		//-Function return the lastest word that put into the map
+	map<string, string>::const_iterator it = myMap.end();
+	string result = "";
+	result.append(it->first);
+	result.append(": ");
+	result.append(it->second);
+	return result;
 }
 
-string DataStructures::recent() const{
-	return myvec.back()["hint"]->second;
-}
-
-void serialize(Archive & ar, const unsigned int version)
-{
-	ar & myMap;
-	ar & wordPos;
+string DataStructures::search(const string word) const{		//-Function searching through the map find the definition, return the def of that word
+	map<string, string>::const_iterator it;
+	string result = "";	//-Empty string to add to make a sentence
+	for (it = myMap.begin(); it != myMap.end(); it++){
+		if (it->first.compare(word) == 0){
+			result.append(it->first);
+			result.append(": ");
+			result.append(it->second);
+			return result;
+		}
+	}
+	return "Can't find any word";	//-return this statement if didn't not find that word
 }

@@ -10,18 +10,24 @@ using namespace std;
 
 class DataStructures {
 	private:
-		string input;
-		string hint_input;
 		friend class boost::serialization::access;
 		template<class Archive>
-		void serialize(Archive & ar, const unsigned int version);
+		void serialize(Archive & ar, const unsigned int version)
+		{
+			ar & myMap;
+        		ar & wordPos;
+		}
+		string word;	//-Word input
+		string def;	//-Word def input
+		int index;	//-Sequence
 	public:
 		DataStructures();
-		map<string, map<string, string> > myMap;
-		vector<map<string, string> > myvec;
-		void add(const string hint, const string hint_input, const string input);
-		void rm(int index);
+		map<string, string> myMap;
+		map<string, int> wordPos;
+		void add(const string word, const string def);
+		void rm(const int index);
 		void display();
-		void update(const string hint, const string hint_input, const string input);
+		void update(const string word, const string def);
 		string recent() const;
+		string search(const string word) const;
 };
