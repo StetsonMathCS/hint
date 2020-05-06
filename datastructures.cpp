@@ -44,3 +44,9 @@ void DataStructures::rm(int index){
 string DataStructures::recent() const{
 	return myvec.back()["hint"]->second;
 }
+
+void serialize(Archive & ar, const unsigned int version)
+{
+	ar & myMap;
+	ar & wordPos;
+}
