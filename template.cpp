@@ -13,6 +13,12 @@
 #include <cstdlib>
 #include <boost/filesystem.hpp>
 
+// looks like some things may be missing.
+#include<filesystem>
+#include <chrono>
+#include <iomanip>
+
+
 namespace fs = boost::filesystem;
 
 using namespace std;
@@ -29,7 +35,7 @@ int main()
     // The ftime variables are used to compare the time of newhelp.txt's creation with the time it was last overwritten.
     // Process IDs could also be used for the same purpose as the ftimes, and would likely be more efficient, but the ftimes work as well.
 
-    auto ftime = fs::last_write_time("temp/newhelp.txt");
+    auto ftime = fs::last_write_time("temp/newhelp.txt"); 
     auto ftime2 = fs::last_write_time("temp/newhelp.txt");
 
     if(pEnv != NULL) // Checks if the user has an EDITOR variable set, and opens newhelp.txt in their default editor if they have an EDITOR variable set

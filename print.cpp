@@ -1,6 +1,6 @@
 #include <iostream>
 #include <string>
-#include "DataStructures.cpp"
+#include "datastructures.cpp"
 using namespace std;
 
 // separate print functions to print out the data given
