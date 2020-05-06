@@ -5,7 +5,7 @@
 #include <ctime>
 #include <time.h>
 #include "datastructures.h"
-
+#include <fstream>
 ////serialization
 #include <boost/archive/text_iarchive.hpp>
 #include <boost/archive/text_oarchive.hpp>
@@ -95,6 +95,7 @@ int main(int argc, char** argv) {
 				// From Cas - Sorry, wasn't really sure what this section did? It seems to record inputs, but those inputs should be
 				// recorded in their specific sections, right? 
 				string textInput;
+				string another; // I can't remember if this was a string or not but this variable was deleted at some point so it can't compile without it
 				cout << user_input << ": ";
 				cin >> textInput; 		// -Text input that user do (eg. search: csci221 -> csci221 is the textInput)
 				myMap[user_input][textInput] = mytime;
@@ -115,7 +116,7 @@ int main(int argc, char** argv) {
 					count[user_input][textInput] = 1;
 				}
 			}
-			else if(user_input.compare("ask") == 0) {
+			if(user_input.compare("ask") == 0) { // needs to either be a new if, or the previous "else" needs to have a conditional
 
 			}
 			else if(user_input.compare("help") == 0) {
