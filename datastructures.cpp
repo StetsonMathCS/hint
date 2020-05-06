@@ -9,7 +9,7 @@ DataStructures::DataStructures(){
 	index = 1;
 }
 
-void DataStructures::add(const string word, const string def){ 		//-Adding new word and its definition into the map 
+void DataStructures::add(const string word, const string def, const string in){ 		//-Adding new word and its definition into the map 
 	if (myMap.count(word)){						//-Checking if that word is already existed
 		cout << word << " is already defined. Update? (Y/N)";
 		string input;
@@ -28,7 +28,7 @@ void DataStructures::add(const string word, const string def){ 		//-Adding new w
 }
 
 
-void DataStructures::update(const string word, const string def){
+void DataStructures::update(const string word, const string def, const string in){
 	if (myMap.count(word)){			// -Update the existed word
 		myMap[word] = def;
 	}else{					//-If that word is not exist -> creating a new one by using add function
@@ -46,7 +46,7 @@ void DataStructures::display() {	//-Print out all the element of the map, word
 
 void DataStructures::rm(const int index){	//-Removing one of the word of the map
 	map<string, string>::const_iterator it;	//-Iterate through the map in order to get the string
-						
+
 	for (it = myMap.begin(); it != myMap.end(); it++){
 		if (wordPos[it->first] == index){
 			myMap.erase(it->first);

@@ -5,7 +5,7 @@
 #include <ctime>
 #include <time.h>
 #include "datastructures.h"
-#include <fstream>
+#include <fstream> // needs to be included for some functions used
 ////serialization
 #include <boost/archive/text_iarchive.hpp>
 #include <boost/archive/text_oarchive.hpp>
@@ -47,33 +47,33 @@ void display(map<string, map<string, string> > *myMap, map<string, map<string, i
 //saves serialized archive to a file
 void save_hints(const DataStructures& hints)
 {
-        string homedir = string(getenv("HOME"))+"\\hints.txt";
-        //saves in user
-        ofstream ofh(homedir.c_str());
-        //saves on system
-                //ofstream ofs(system);
-        boost::archive::text_oarchive oah(ofh);
-                //boost::archive::text_oarchive oas(ofs);
-        oah << hints;
-        //oas << hints;
+	string homedir = string(getenv("HOME"))+"\\hints.txt";
+	//saves in user
+	ofstream ofh(homedir.c_str());
+	//saves on system
+	//ofstream ofs(system);
+	boost::archive::text_oarchive oah(ofh);
+	//boost::archive::text_oarchive oas(ofs);
+	oah << hints;
+	//oas << hints;
 }
 
 
 //load serialized archive to a file
 void load_hints(DataStructures& hints)
 {
-        string homedir = string(getenv("HOME"))+"\\hints.txt";
-        ifstream ifs(homedir.c_str());
-        //if xml, boost::archive::xml_iarchive ia(ifs);
-        boost::archive::text_iarchive ia(ifs);
-        //serialize(oa, 1)
-        ia >> hints;
+	string homedir = string(getenv("HOME"))+"\\hints.txt";
+	ifstream ifs(homedir.c_str());
+	//if xml, boost::archive::xml_iarchive ia(ifs);
+	boost::archive::text_iarchive ia(ifs);
+	//serialize(oa, 1)
+	ia >> hints;
 }
 
 
 // -Main file fixed by Cas
 int main(int argc, char** argv) {
-	DataStructures data();
+	DataStructures data; // doesn't need parentheses when declaring a DataStructures variable
 	map<string, map<string, string> > myMap; // -Create map to store specific command value (eg. hint search for csci221 will be store into the map and time did)
 	map<string, map<string, int> > count;    // -Create map to store numbers of that commands use
 	vector<string> myvec;			 // -Vector to store the history of commands use
@@ -183,5 +183,5 @@ int main(int argc, char** argv) {
 	}else{
 		cout << "Not enough information" << endl;
 	}
-		return 0;	// -main needs to return 0 hehe ^^
-	}
+	return 0;	// -main needs to return 0 hehe ^^
+}

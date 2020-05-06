@@ -12,11 +12,11 @@ class DataStructures {
 	private:
 		friend class boost::serialization::access;
 		template<class Archive>
-		void serialize(Archive & ar, const unsigned int version)
-		{
-			ar & myMap;
-        		ar & wordPos;
-		}
+			void serialize(Archive & ar, const unsigned int version)
+			{
+				ar & myMap;
+				ar & wordPos;
+			}
 		string word;	//-Word input
 		string def;	//-Word def input
 		int index;	//-Sequence
@@ -24,10 +24,10 @@ class DataStructures {
 		DataStructures();
 		map<string, string> myMap;
 		map<string, int> wordPos;
-		void add(const string word, const string def);
+		void add(const string word, const string def, const string in); 
 		void rm(const int index);
 		void display();
-		void update(const string word, const string def);
+		void update(const string word, const string def, const string in);
 		string recent() const;
 		string search(const string word) const;
 };
